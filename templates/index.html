@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diabetes Prediction</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f0f4f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      width: 100%;
+      padding: 18px 0;
+      color: white;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    form {
+      background-color: #ffffff;
+      margin-top: 30px;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 90%;
+      margin-bottom: 40px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 6px;
+      text-align: left;
+      color: #34495e;
+    }
+
+    input[type="number"],
+    input[name^="f"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .button-row input[type="submit"],
+    .button-row button {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    input[type="submit"] {
+      background-color: #27ae60;
+      color: white;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #219150;
+    }
+
+    button#clearBtn {
+      background-color: orange;
+      color: white;
+    }
+
+    button#clearBtn:hover {
+      background-color: #e67e22;
+    }
+
+    .result {
+      margin-top: 10px;
+      text-align: center;
+      display: none; /* hidden by default */
+    }
+
+    .result.show {
+      display: block; /* shown when there's a result */
+    }
+
+    .result h3 {
+      font-size: 22px;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .diabetic {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    .not-diabetic {
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .confidence {
+      color: #2980b9;
+      font-size: 16px;
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 480px) {
+      form {
+        padding: 25px 20px;
+      }
+
+      header h1 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Diabetes Prediction Form</h1>
+  </header>
+
+  <form method="post" id="predictForm">
+    <label>Pregnancies</label>
+    <input name="f0" type="number" step="1" required value="{{ request.form.f0 or '' }}">
+
+    <label>Glucose</label>
+    <input name="f1" type="number" step="any" required value="{{ request.form.f1 or '' }}">
+
+    <label>Blood Pressure</label>
+    <input name="f2" type="number" step="any" required value="{{ request.form.f2 or '' }}">
+
+    <label>Skin Thickness</label>
+    <input name="f3" type="number" step="any" required value="{{ request.form.f3 or '' }}">
+
+    <label>Insulin</label>
+    <input name="f4" type="number" step="any" required value="{{ request.form.f4 or '' }}">
+
+    <label>BMI</label>
+    <input name="f5" type="number" step="any" required value="{{ request.form.f5 or '' }}">
+
+    <label>Diabetes Pedigree Function</label>
+    <input name="f6" type="number" step="any" required value="{{ request.form.f6 or '' }}">
+
+    <label>Age</label>
+    <input name="f7" type="number" step="1" required value="{{ request.form.f7 or '' }}">
+
+    <div class="button-row">
+      <input type="submit" value="Predict">
+      <button type="button" id="clearBtn" onclick="clearForm()">Clear Data</button>
+    </div>
+  </form>
+
+  {% if result %}
+    <div class="result show" id="resultBox">
+      <h3 class="{{ 'diabetic' if result == 'Diabetic' else 'not-diabetic' }}">
+        Prediction Result: {{ result }}
+      </h3>
+      {% if confidence is not none %}
+        <div class="confidence">Model Confidence: {{ confidence }}%</div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <script>
+    function clearForm() {
+      const inputs = document.querySelectorAll('input[name^="f"]');
+      inputs.forEach(input => input.value = '');
+
+      const resultBox = document.getElementById('resultBox');
+      if (resultBox) {
+        resultBox.style.display = 'none';
+      }
+    }
+  </script>
+
+</body>
+</html>
