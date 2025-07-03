@@ -4,6 +4,13 @@ A machine learning web application that predicts whether a person has diabetes b
 
 ---
 
+## 🌐 Live Demo
+
+👉 [Click here to use the Diabetes Prediction App](https://diabetes-prediction-web-app-ydqt.onrender.com/)
+
+---
+
+
 ## ✅ Features
 
 - Cleaned and preprocessed real-world dataset  
